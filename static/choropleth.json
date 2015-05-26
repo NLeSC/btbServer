@@ -1,0 +1,66 @@
+{
+  "width": 960,
+  "height": 500,
+  "data": [{
+    "name": "contributions",
+    "url": "data/all_contributions.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "rate": "number"
+      }
+    }
+  }, {
+    "name": "countries",
+    "url": "data/world-110m.json",
+    "format": {
+      "type": "topojson",
+      "feature": "countries"
+    },
+    "transform": [{
+      "type": "geopath",
+      "value": "data",
+      "projection": "mercator"
+    }, {
+      "type": "zip",
+      "key": "data.id",
+      "with": "contributions",
+      "withKey": "data.id",
+      "as": "value",
+      "default": null
+    }, {
+      "type": "filter",
+      "test": "d.path!=null && d.value!=null"
+    }]
+  }],
+  "scales": [{
+    "name": "color",
+    "type": "linear",
+    "domain": [0.01, 4],
+    "range": ["brown", "steelblue"]
+  }],
+  "marks": [{
+    "type": "path",
+    "from": {
+      "data": "countries"
+    },
+    "properties": {
+      "enter": {
+        "path": {
+          "field": "path"
+        }
+      },
+      "update": {
+        "fill": {
+          "scale": "color",
+          "field": "value.data.contribution"
+        }
+      },
+      "hover": {
+        "fill": {
+          "value": "red"
+        }
+      }
+    }
+  }]
+}
