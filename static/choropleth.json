@@ -3,16 +3,14 @@
   "height": 500,
   "data": [{
     "name": "contributions",
-    "url": "data/all_contributions.csv",
+    "url": "contribLondon.json",
     "format": {
-      "type": "csv",
-      "parse": {
-        "rate": "number"
-      }
+      "type": "json",
+      "property": "relativeScore"
     }
   }, {
     "name": "countries",
-    "url": "data/world-110m.json",
+    "url": "world-110m.json",
     "format": {
       "type": "topojson",
       "feature": "countries"
@@ -25,7 +23,7 @@
       "type": "zip",
       "key": "data.id",
       "with": "contributions",
-      "withKey": "data.id",
+      "withKey": "data.countryCode",
       "as": "value",
       "default": null
     }, {
@@ -36,7 +34,7 @@
   "scales": [{
     "name": "color",
     "type": "linear",
-    "domain": [0.01, 4],
+    "domain": [-1, 1],
     "range": ["brown", "steelblue"]
   }],
   "marks": [{
@@ -53,7 +51,7 @@
       "update": {
         "fill": {
           "scale": "color",
-          "field": "value.data.contribution"
+          "field": "value.data.score"
         }
       },
       "hover": {

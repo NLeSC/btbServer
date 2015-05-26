@@ -8,8 +8,10 @@
   <script src="webcomponents.js"></script>
   <link rel="import" href="nlesc-vega.html">
   <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="http://trifacta.github.io/vega/lib/topojson.js"></script>
   <script>
     var debugData = {};
+
     function triggerChange() {
       targetWord = $('#queryWord').val();
       targetURL = '/wikicontrib/' + targetWord;
@@ -36,11 +38,13 @@
   <h2>Example plots with nlesc-vega element</h2>
   <h3>Referece</h3>
   <nlesc-vega spec="countriesExpected.json"></nlesc-vega>
-  <h3>Wikipedia page title: <div id="wikititle">London (example)</div></h3>
+  <h3>Wikipedia page title:
+    <div id="wikititle">London (example)</div>
+  </h3>
   <nlesc-vega spec="countriesObserved.json" id="veObserved"></nlesc-vega>
   <nlesc-vega spec="countriesRelative.json" id="veRelative"></nlesc-vega>
-  <nlesc-vega spec="countriesMap.json" id="veMap"></nlesc-vega>
-  <input type="text" id="queryWord" value="London"/>
+  <nlesc-vega spec="choropleth.json" id="veMap"></nlesc-vega>
+  <input type="text" id="queryWord" value="London" />
   <button onclick="triggerChange()" id="triggerButton">Update</button>
 </body>
 
