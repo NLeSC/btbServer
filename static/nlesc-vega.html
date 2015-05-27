@@ -23,10 +23,16 @@ Element providing solution to no problem in particular.
     function loadSpec(polymerElement) {
       spec = polymerElement.spec;
       polymerElement.chart = vg.parse.spec(polymerElement.spec, function(chart) {
-        polymerElement.view = chart({
-          el: polymerElement
-        });
-        polymerElement.view.update();
+
+        try {
+          polymerElement.view = chart({
+            el: polymerElement
+          });
+          polymerElement.view.update();
+        } catch(err) {
+          console.error('Error encountered loading configuration: ' + polymerElement.spec +
+            '\nError trace: \n' + err.stack);
+        }
       });
     }
     Polymer({
