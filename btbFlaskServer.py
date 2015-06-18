@@ -11,6 +11,7 @@ import numpy as np
 import btb.utils.tools as btbtools
 import btb.utils.wikiquery as wq
 
+import json
 import mwclient
 import pickle as pkl
 import pycountry as pyc
@@ -34,10 +35,15 @@ sanders_allCatNames = np.array(sandersFeatures['catNames'])
 # sanders_bookNames = sanders_bookNames[:N]
 
 
-def makeKeyMap(edits):
-    keyMap = [{'country': k, 'score': v, 'countryCode': countryNumber(k)}
-              for k, v in edits.iteritems()]
-    return sorted(keyMap, key=itemgetter('score'), reverse=True)
+def makeKeyMap(expEdits, knwRevs, cmpEdits):
+    keyMap = [{
+        'country': k,
+        'countryCode': countryNumber(k),
+        'expected': expEdits[k],
+        'observed': knwRevs[k],
+        'relative': cmpEdits[k]
+    } for k in expEdits.iterkeys()]
+    return sorted(keyMap, key=itemgetter('expected'), reverse=True)
 
 
 def countryNumber(ctrAlpha):
@@ -73,13 +79,13 @@ def interestInWord(word):
     cmpEdits = {k: v[2] for k, v in cmpEdits.iteritems()}
 
     # Format for Vega
-    expEdits = makeKeyMap(expEdits)
-    knwRevs = makeKeyMap(knwRevs)
-    cmpEdits = makeKeyMap(cmpEdits)
-    return jsonify(confidence=conf,
-                   expectedScore=expEdits,
-                   observedScore=knwRevs,
-                   relativeScore=cmpEdits)
+    vegaArray = makeKeyMap(expEdits, knwRevs, cmpEdits)
+
+    # TODO: add confidence=conf ?
+    # Would be nice, but we are not currently using it, and it turns
+    # json more difficult to parse.
+    # return jsonify(confidence=conf, scores=vegaArray)
+    return json.dumps(vegaArray)
 
 
 @app.route('/distances/')
