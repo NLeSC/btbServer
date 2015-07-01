@@ -1,9 +1,9 @@
 FROM mkuzak/flask
 
-RUN pip install
 RUN mkdir /app
 WORKDIR /app
 
 COPY * ./
+RUN pip install
 
 CMD python btbFlaskServer.py
