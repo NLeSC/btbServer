@@ -2,7 +2,6 @@ from __future__ import division
 from flask import Flask
 from flask import jsonify
 from flask import request
-from flask import url_for
 
 from operator import itemgetter
 from collections import defaultdict
@@ -54,7 +53,11 @@ def countryNumber(ctrAlpha):
 
 @app.route('/')
 def index():
-    return url_for('static', filename='clusters.html')
+    links = []
+    for rule in app.url_map.iter_rules():
+        url = str(rule)
+        links.append((url, rule.endpoint))
+    return jsonify(links)
 
 
 @app.route('/wikicontrib/<word>')
