@@ -2,6 +2,7 @@ from __future__ import division
 from flask import Flask
 from flask import jsonify
 from flask import request
+from flask.ext.cors import CORS, cross_origin
 
 from operator import itemgetter
 from collections import defaultdict
@@ -61,6 +62,7 @@ def index():
 
 
 @app.route('/wikicontrib/<word>')
+@cross_origin()
 def interestInWord(word):
 
     ips, usrs, nrevs = wq.getContributionsForPage(wiki, word)
@@ -92,6 +94,7 @@ def interestInWord(word):
 
 
 @app.route('/distances/')
+@cross_origin()
 def corpusDistances():
     if 'features[]' in request.args:
         featIdx = request.args.getlist('features[]')
@@ -141,6 +144,7 @@ def getName(bookId):
 
 
 @app.route('/clusters/')
+@cross_origin()
 def clusters():
     if 'features[]' in request.args:
         featIdx = request.args.getlist('features[]')
@@ -172,3 +176,5 @@ def clusters():
 if __name__ == '__main__':
     app.debug = True
     app.run(host='0.0.0.0')
+    cors = CORS(app)
+    app.config['CORS_HEADERS'] = 'Content-Type'
